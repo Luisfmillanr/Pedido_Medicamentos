@@ -4,3 +4,5 @@ prueba|Analgésico|1|Cemefar|Principal
 prueba 2|Anestésico|7|Cemefar|, Secundaria
 pastita 1|Antidepresivo|100|Cofarma|, Secundaria
 trabajo2|Analéptico|100|Empsephar|Principal, Secundaria
+luis|Analgésico|8|Cofarma|Principal
+asd123|Antidepresivo|50|Empsephar|Principal

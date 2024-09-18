@@ -1,8 +1,24 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ButtonGroup;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 
+
+/**
+ * Clase que gestiona la interfaz gráfica de usuario para realizar pedidos de medicamentos.
+ * Utiliza componentes de Swing para la interacción del usuario.
+ */
 public class PedidoMedicamentosGUI extends JFrame {
 
     private JTextField nombreField;
@@ -12,17 +28,22 @@ public class PedidoMedicamentosGUI extends JFrame {
     private JCheckBox principal, secundaria;
     private PedidoMedicamentosController controller;
 
+    /**
+     * Constructor de la GUI que recibe el controlador para manejar la lógica de negocio.
+     * 
+     * @param controller El controlador que gestiona la lógica entre la vista y el modelo.
+     */
     public PedidoMedicamentosGUI(PedidoMedicamentosController controller) {
         this.controller = controller;
         initComponents();
     }
 
+    // Inicializa los componentes gráficos de la interfaz
     private void initComponents() {
-        // Inicializar componentes
         setTitle("Sistema de Pedido de Medicamentos");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 500);
-        setLayout(new GridLayout(9, 2)); // Aumentamos el GridLayout para acomodar más componentes
+        setLayout(new GridLayout(9, 2));
 
         // Campos del formulario
         nombreField = new JTextField();
@@ -41,7 +62,7 @@ public class PedidoMedicamentosGUI extends JFrame {
         // Botones
         JButton confirmarButton = new JButton("Confirmar");
         JButton borrarButton = new JButton("Borrar");
-        JButton consultarButton = new JButton("Consultar Pedidos");  // Añadimos botón de consulta
+        JButton consultarButton = new JButton("Consultar Pedidos");
 
         confirmarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -59,7 +80,6 @@ public class PedidoMedicamentosGUI extends JFrame {
             }
         });
 
-        // Acción del botón "Consultar Pedidos"
         consultarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -84,14 +104,12 @@ public class PedidoMedicamentosGUI extends JFrame {
         add(new JLabel("Sucursal:"));
         add(principal);
         add(secundaria);
-
-        // Añadimos los tres botones en la interfaz
         add(confirmarButton);
         add(borrarButton);
-        add(consultarButton);  // Añadimos el botón de consulta
+        add(consultarButton);
     }
 
-    // Realizar pedido
+    // Realiza el pedido y lo guarda
     private void realizarPedido() throws IOException {
         String nombre = nombreField.getText();
         String tipo = (String) tipoComboBox.getSelectedItem();
@@ -107,7 +125,7 @@ public class PedidoMedicamentosGUI extends JFrame {
         }
     }
 
-    // Limpiar formulario
+    // Limpia el formulario de la GUI
     private void limpiarFormulario() {
         nombreField.setText("");
         cantidadField.setText("");
@@ -119,7 +137,7 @@ public class PedidoMedicamentosGUI extends JFrame {
         secundaria.setSelected(false);
     }
 
-    // Mostrar pedidos guardados
+    // Muestra los pedidos guardados en una ventana emergente
     private void mostrarPedidos() throws IOException {
         String[] pedidos = controller.consultarPedidos();
         JTextArea areaPedidos = new JTextArea();
@@ -128,11 +146,11 @@ public class PedidoMedicamentosGUI extends JFrame {
         }
         JScrollPane scrollPane = new JScrollPane(areaPedidos);
 
-        // Crear una nueva ventana para mostrar los pedidos
         JFrame frame = new JFrame("Consulta de Pedidos");
-        frame.setSize(400, 300);
+        frame.setSize(450, 350);
         frame.add(scrollPane);
         frame.setVisible(true);
     }
 }
+
 
