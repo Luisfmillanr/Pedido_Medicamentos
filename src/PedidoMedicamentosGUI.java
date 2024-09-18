@@ -4,6 +4,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -13,7 +14,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-
 
 /**
  * Clase que gestiona la interfaz gráfica de usuario para realizar pedidos de medicamentos.
@@ -109,7 +109,7 @@ public class PedidoMedicamentosGUI extends JFrame {
         add(consultarButton);
     }
 
-    // Realiza el pedido y lo guarda
+    // Realiza el pedido y lo guarda, mostrando un resumen si es válido
     private void realizarPedido() throws IOException {
         String nombre = nombreField.getText();
         String tipo = (String) tipoComboBox.getSelectedItem();
@@ -119,7 +119,7 @@ public class PedidoMedicamentosGUI extends JFrame {
 
         if (controller.validarPedido(nombre, tipo, cantidadStr, distribuidor, sucursales)) {
             controller.guardarPedido(nombre, tipo, Integer.parseInt(cantidadStr), distribuidor, sucursales);
-            JOptionPane.showMessageDialog(this, "Pedido realizado correctamente.");
+            mostrarResumenPedido(nombre, tipo, cantidadStr, distribuidor, sucursales);
         } else {
             JOptionPane.showMessageDialog(this, "Error en los datos del pedido.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -147,10 +147,57 @@ public class PedidoMedicamentosGUI extends JFrame {
         JScrollPane scrollPane = new JScrollPane(areaPedidos);
 
         JFrame frame = new JFrame("Consulta de Pedidos");
-        frame.setSize(450, 350);
+        frame.setSize(400, 300);
         frame.add(scrollPane);
         frame.setVisible(true);
     }
+
+    // Muestra el resumen del pedido en una nueva ventana
+    private void mostrarResumenPedido(String nombre, String tipo, String cantidad, String distribuidor, String sucursales) {
+        JFrame resumenFrame = new JFrame("Pedido al distribuidor " + distribuidor);
+        resumenFrame.setSize(400, 300);
+        resumenFrame.setLayout(new GridLayout(4, 1));
+
+        // Texto del pedido
+        JLabel pedidoLabel = new JLabel(cantidad + " unidades del " + tipo + " " + nombre);
+        resumenFrame.add(pedidoLabel);
+
+        // Texto con la dirección
+        String direccion = "Para la farmacia situada en ";
+        if (sucursales.contains("Principal")) {
+            direccion += "Calle de la Rosa n.28 ";
+        }
+        if (sucursales.contains("Secundaria")) {
+            direccion += "y para la situada en Calle Alcazabilla n.3";
+        }
+        JLabel direccionLabel = new JLabel(direccion);
+        resumenFrame.add(direccionLabel);
+
+        // Botón "Enviar Pedido"
+        JButton enviarButton = new JButton("Enviar Pedido");
+        enviarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Pedido enviado");
+                resumenFrame.dispose();
+            }
+        });
+        resumenFrame.add(enviarButton);
+
+        // Botón "Cancelar"
+        JButton cancelarButton = new JButton("Cancelar");
+        cancelarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                resumenFrame.dispose();
+            }
+        });
+        resumenFrame.add(cancelarButton);
+
+        // Mostrar la ventana
+        resumenFrame.setVisible(true);
+    }
 }
+
 
 
