@@ -1,4 +1,8 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +14,7 @@ public class PedidoMedicamentoModel {
     public void guardarPedido(String nombre, String tipo, int cantidad, String distribuidor, String sucursales) throws IOException {
         FileWriter fw = new FileWriter(ARCHIVO_PEDIDOS, true); // true para añadir al final del archivo
         BufferedWriter bw = new BufferedWriter(fw);
-        bw.write(nombre + "|" + tipo + "|" + cantidad + "|" + distribuidor + "|" + sucursales);
+        bw.write(nombre + " | " + tipo + " | " + cantidad + " | " + distribuidor + " | " + sucursales);
         bw.newLine();
         bw.close();
     }

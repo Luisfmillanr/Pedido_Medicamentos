@@ -43,5 +43,3 @@ public class PedidoMedicamentosController {
         return model.cargarPedidos().toArray(new String[0]);
     }
 }
-
-

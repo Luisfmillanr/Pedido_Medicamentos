@@ -22,7 +22,7 @@ public class PedidoMedicamentosGUI extends JFrame {
         setTitle("Sistema de Pedido de Medicamentos");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 500);
-        setLayout(new GridLayout(8, 2));
+        setLayout(new GridLayout(9, 2)); // Aumentamos el GridLayout para acomodar más componentes
 
         // Campos del formulario
         nombreField = new JTextField();
@@ -41,6 +41,7 @@ public class PedidoMedicamentosGUI extends JFrame {
         // Botones
         JButton confirmarButton = new JButton("Confirmar");
         JButton borrarButton = new JButton("Borrar");
+        JButton consultarButton = new JButton("Consultar Pedidos");  // Añadimos botón de consulta
 
         confirmarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -58,7 +59,18 @@ public class PedidoMedicamentosGUI extends JFrame {
             }
         });
 
-        // Añadir componentes
+        // Acción del botón "Consultar Pedidos"
+        consultarButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    mostrarPedidos();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        // Añadir componentes al layout
         add(new JLabel("Nombre del Medicamento:"));
         add(nombreField);
         add(new JLabel("Tipo del Medicamento:"));
@@ -72,8 +84,11 @@ public class PedidoMedicamentosGUI extends JFrame {
         add(new JLabel("Sucursal:"));
         add(principal);
         add(secundaria);
+
+        // Añadimos los tres botones en la interfaz
         add(confirmarButton);
         add(borrarButton);
+        add(consultarButton);  // Añadimos el botón de consulta
     }
 
     // Realizar pedido
@@ -104,15 +119,20 @@ public class PedidoMedicamentosGUI extends JFrame {
         secundaria.setSelected(false);
     }
 
-    public static void main(String[] args) {
-        PedidoMedicamentoModel model = new PedidoMedicamentoModel();
-        PedidoMedicamentosController controller = new PedidoMedicamentosController(model);
-        PedidoMedicamentosGUI gui = new PedidoMedicamentosGUI(controller);
-        gui.setVisible(true);
+    // Mostrar pedidos guardados
+    private void mostrarPedidos() throws IOException {
+        String[] pedidos = controller.consultarPedidos();
+        JTextArea areaPedidos = new JTextArea();
+        for (String pedido : pedidos) {
+            areaPedidos.append(pedido + "\n");
+        }
+        JScrollPane scrollPane = new JScrollPane(areaPedidos);
+
+        // Crear una nueva ventana para mostrar los pedidos
+        JFrame frame = new JFrame("Consulta de Pedidos");
+        frame.setSize(400, 300);
+        frame.add(scrollPane);
+        frame.setVisible(true);
     }
 }
-
-
-
-
 
